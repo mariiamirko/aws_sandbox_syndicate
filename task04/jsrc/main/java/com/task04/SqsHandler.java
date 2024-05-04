@@ -17,7 +17,7 @@ import java.util.Map;
 	roleName = "sqs_handler-role",
 	logsExpiration = RetentionSetting.SYNDICATE_ALIASES_SPECIFIED
 )
-@SqsTriggerEventSource(targetQueue = "async_queue", batchSize = 100)
+@SqsTriggerEventSource(targetQueue = "async_queue", batchSize = 10)
 @DependsOn(resourceType = ResourceType.SQS_QUEUE, name = "async_queue")
 public class SqsHandler implements RequestHandler<SQSEvent, Void > {
 
