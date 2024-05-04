@@ -14,21 +14,10 @@
             "dynamodb:DeleteItem",
             "ssm:PutParameter",
             "ssm:GetParameter",
-            "kms:Decrypt",
-            "sqs:*",
-            "sns:*"
+            "kms:Decrypt"
           ],
           "Effect": "Allow",
           "Resource": "*"
-        },
-        {
-          "Sid":"sqs-lambda-perm",
-          "Effect":"Allow",
-          "Principal":{
-            "Service":"sqs.amazonaws.com"
-          },
-          "Action":"lambda:InvokeFunction",
-          "Resource":"arn:aws:lambda:eu-central-1::function:cmtr-6245e71b-sqs_handler-test"
         }
       ],
       "Version": "2012-10-17"
@@ -36,7 +25,7 @@
     "resource_type": "iam_policy"
   },
   "sqs_handler-role": {
-    "predefined_policies": [],
+    "predefined_policies": ["AWSLambdaSQSQueueExecutionRole"],
     "principal_service": "lambda",
     "custom_policies": [
       "lambda-basic-execution"
