@@ -28,7 +28,7 @@
             "Service":"sqs.amazonaws.com"
           },
           "Action":"lambda:InvokeFunction",
-          "Resource":"arn:aws:lambda:eu-central-1::${sqs_handler}"
+          "Resource":"arn:aws:lambda:eu-central-1::function:cmtr-6245e71b-sqs_handler-test"
         }
       ],
       "Version": "2012-10-17"
