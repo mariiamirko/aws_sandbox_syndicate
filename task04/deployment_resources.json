@@ -20,6 +20,15 @@
           ],
           "Effect": "Allow",
           "Resource": "*"
+        },
+        {
+          "Sid":"sqs-lambda-perm",
+          "Effect":"Allow",
+          "Principal":{
+            "Service":"sqs.amazonaws.com"
+          },
+          "Action":"lambda:InvokeFunction",
+          "Resource":"arn:aws:lambda:eu-central-1::${sqs_handler}"
         }
       ],
       "Version": "2012-10-17"
