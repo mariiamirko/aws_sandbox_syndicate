@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 		roleName = "api_handler-role",
 		logsExpiration = RetentionSetting.SYNDICATE_ALIASES_SPECIFIED
 )
-@DependsOn(resourceType = ResourceType.DYNAMODB_TABLE, name = "Events")
+//@DependsOn(resourceType = ResourceType.DYNAMODB_TABLE, name = "Events")
 public class ApiHandler implements RequestHandler<RequestDTO, ResponseDTO> {
 
 	public ResponseDTO handleRequest(RequestDTO request, Context context) {
