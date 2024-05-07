@@ -1,7 +1,10 @@
 package com.task05.model;
 
+import lombok.ToString;
+
 import java.util.Map;
 
+@ToString
 public class EventDTO {
 	private final String id;
 	private final int principalId;

@@ -1,7 +1,10 @@
 package com.task05.model;
 
+import lombok.ToString;
+
 import java.util.Map;
 
+@ToString
 public class RequestDTO {
 	private final int principalId;
 	private final Map<String, String> content;

@@ -1,5 +1,8 @@
 package com.task05.model;
 
+import lombok.ToString;
+
+@ToString
 public class ResponseDTO {
 	private final int statusCode;
 	private final EventDTO event;

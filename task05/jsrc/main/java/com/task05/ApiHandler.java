@@ -6,6 +6,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
 import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.syndicate.deployment.annotations.lambda.LambdaHandler;
 import com.syndicate.deployment.annotations.resources.DependsOn;
@@ -28,6 +29,8 @@ import java.util.stream.Collectors;
 public class ApiHandler implements RequestHandler<RequestDTO, ResponseDTO> {
 
 	public ResponseDTO handleRequest(RequestDTO request, Context context) {
+		LambdaLogger logger = context.getLogger();
+		logger.log(request.toString());
 		AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard()
 				.withRegion(Regions.EU_CENTRAL_1)
 				.build();
@@ -37,7 +40,7 @@ public class ApiHandler implements RequestHandler<RequestDTO, ResponseDTO> {
 
 		PutItemRequest putItemRequest = new PutItemRequest();
 		putItemRequest.withTableName("cmtr-6245e71b-Events-test")
-				.withItem(Map.of("id", new AttributeValue().withS(event.getId()),
+				.setItem(Map.of("id", new AttributeValue().withS(event.getId()),
 						"principalId", new AttributeValue().withN(String.valueOf(event.getPrincipalId())),
 						"createdAt", new AttributeValue().withS(event.getCreatedAt()),
 						"body", new AttributeValue().withM(event.getBody().entrySet()
@@ -46,6 +49,7 @@ public class ApiHandler implements RequestHandler<RequestDTO, ResponseDTO> {
 										entry -> new AttributeValue(entry.getValue()))))
 				));
 		client.putItem(putItemRequest);
+		logger.log(event.toString());
 		return new ResponseDTO(201, event);
 	}
 }
