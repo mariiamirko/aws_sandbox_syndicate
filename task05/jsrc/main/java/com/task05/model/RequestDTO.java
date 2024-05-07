@@ -6,6 +6,6 @@ import java.util.Map;
 
 @Data
 public class RequestDTO {
-	private final int principalId;
-	private final Map<String, String> content;
+	private int principalId;
+	private Map<String, String> content;
 }

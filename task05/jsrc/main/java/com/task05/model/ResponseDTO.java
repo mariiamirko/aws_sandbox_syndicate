@@ -1,10 +1,11 @@
 package com.task05.model;
 
+import lombok.Builder;
 import lombok.Data;
-import lombok.ToString;
 
 @Data
+@Builder
 public class ResponseDTO {
-	private final int statusCode;
-	private final EventDTO event;
+	private int statusCode;
+	private EventDTO event;
 }

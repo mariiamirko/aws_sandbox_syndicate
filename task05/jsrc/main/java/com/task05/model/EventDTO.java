@@ -1,14 +1,15 @@
 package com.task05.model;
 
+import lombok.Builder;
 import lombok.Data;
-import lombok.ToString;
 
 import java.util.Map;
 
 @Data
+@Builder
 public class EventDTO {
-	private final String id;
-	private final int principalId;
-	private final String createdAt;
-	private final Map<String, String> body;
+	private String id;
+	private int principalId;
+	private String createdAt;
+	private Map<String, String> body;
 }

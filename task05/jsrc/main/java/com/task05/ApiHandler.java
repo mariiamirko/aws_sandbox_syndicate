@@ -35,8 +35,12 @@ public class ApiHandler implements RequestHandler<RequestDTO, ResponseDTO> {
 				.withRegion(Regions.EU_CENTRAL_1)
 				.build();
 
-		EventDTO event = new EventDTO(UUID.randomUUID().toString(), request.getPrincipalId(), Instant.now().toString(),
-				request.getContent());
+		EventDTO event = EventDTO.builder()
+				.id(UUID.randomUUID().toString())
+				.principalId(request.getPrincipalId())
+				.createdAt(Instant.now().toString())
+				.body(request.getContent())
+				.build();
 
 		PutItemRequest putItemRequest = new PutItemRequest();
 		putItemRequest.withTableName("cmtr-6245e71b-Events-test")
@@ -50,6 +54,9 @@ public class ApiHandler implements RequestHandler<RequestDTO, ResponseDTO> {
 				));
 		client.putItem(putItemRequest);
 		logger.log(event.toString());
-		return new ResponseDTO(201, event);
+		return ResponseDTO.builder()
+				.statusCode(201)
+				.event(event)
+				.build();
 	}
 }
