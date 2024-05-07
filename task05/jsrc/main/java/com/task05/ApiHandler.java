@@ -36,7 +36,7 @@ public class ApiHandler implements RequestHandler<RequestDTO, ResponseDTO> {
 				request.getContent());
 
 		PutItemRequest putItemRequest = new PutItemRequest();
-		putItemRequest.withTableName("Events")
+		putItemRequest.withTableName("cmtr-6245e71b-Events-test")
 				.withItem(Map.of("id", new AttributeValue().withS(event.getId()),
 						"principalId", new AttributeValue().withN(String.valueOf(event.getPrincipalId())),
 						"createdAt", new AttributeValue().withS(event.getCreatedAt()),
