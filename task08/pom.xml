@@ -35,7 +35,7 @@
             <groupId>com.meteo.lib</groupId>
             <artifactId>open-meteo-lib</artifactId>
             <scope>system</scope>
-            <version>1.0.0</version>
+            <version>1.0</version>
             <systemPath>${basedir}/lib/OpenMeteoSdkLib.jar</systemPath>
         </dependency>
     </dependencies>
