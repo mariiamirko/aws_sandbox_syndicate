@@ -13,7 +13,6 @@ import com.syndicate.deployment.model.lambda.url.InvokeMode;
 
 @LambdaHandler(lambdaName = "hello_world",
 		roleName = "hello_world-role",
-		isPublishVersion = true,
 		logsExpiration = RetentionSetting.SYNDICATE_ALIASES_SPECIFIED
 )
 @LambdaUrlConfig(
