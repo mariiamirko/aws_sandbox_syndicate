@@ -25,7 +25,7 @@ public class HelloWorld implements RequestHandler<APIGatewayProxyRequestEvent, A
 	@Override
 	public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent apiGatewayProxyRequestEvent,
 			Context context) {
-		if (apiGatewayProxyRequestEvent.getRequestContext().getPath().equals("/hello")) {
+		if (apiGatewayProxyRequestEvent.getPath().equals("/hello")) {
 			return new APIGatewayProxyResponseEvent()
 					.withStatusCode(200)
 					.withBody(gson.toJson(new HelloMessage("Hello from Lambda", 200)));
@@ -34,6 +34,6 @@ public class HelloWorld implements RequestHandler<APIGatewayProxyRequestEvent, A
 			return new APIGatewayProxyResponseEvent()
 					.withStatusCode(400)
 					.withBody(String.format("Bad request syntax or unsupported method. Request path: %s. HTTP method: %s",
-							apiGatewayProxyRequestEvent.getPath(), apiGatewayProxyRequestEvent.getRequestContext().getHttpMethod()));
+							apiGatewayProxyRequestEvent.getPath(), apiGatewayProxyRequestEvent.getHttpMethod()));
 	}
 }
