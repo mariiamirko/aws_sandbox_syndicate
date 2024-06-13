@@ -36,7 +36,8 @@ public class HelloWorld implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
 		else
 			return new APIGatewayProxyResponseEvent()
 					.withStatusCode(400)
-					.withBody(String.format("Bad request syntax or unsupported method. Request path: %s. HTTP method: %s",
-							path, method));
+					.withBody(gson.toJson(new HelloMessage(
+							String.format("Bad request syntax or unsupported method. Request path: %s. HTTP method: %s",
+									path, method), 400)));
 	}
 }
