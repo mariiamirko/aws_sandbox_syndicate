@@ -30,6 +30,7 @@ import static com.syndicate.deployment.model.TracingMode.Active;
 		roleName = "processor-role",
 		tracingMode = Active,
 		isPublishVersion = true,
+		layers = {"sdk-layer"},
 		logsExpiration = RetentionSetting.SYNDICATE_ALIASES_SPECIFIED
 )
 @LambdaLayer(
