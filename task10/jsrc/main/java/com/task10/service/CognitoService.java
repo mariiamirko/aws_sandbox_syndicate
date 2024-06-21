@@ -46,15 +46,13 @@ public class CognitoService {
     public SignInResponse signInUser(final Map<String, Object> input) {
         try {
             final User user = getUserFromEvent(input);
-            final String userPoolId = getUserPoolId(COGNITO_USER_POOL_NAME);
-            final AdminInitiateAuthRequest authRequest = AdminInitiateAuthRequest.builder()
-                    .authFlow(AuthFlowType.ADMIN_NO_SRP_AUTH)
-                    .userPoolId(userPoolId)
+            final InitiateAuthRequest authRequest = InitiateAuthRequest.builder()
+                    .authFlow("USER_PASSWORD_AUTH")
                     .authParameters(Map.of("USERNAME", user.getEmail(), "PASSWORD", user.getPassword()))
                     .clientId(getClientId())
                     .build();
 
-            final AdminInitiateAuthResponse authResponse = cognitoClient.adminInitiateAuth(authRequest);
+            final InitiateAuthResponse authResponse = cognitoClient.initiateAuth(authRequest);
 
             final AuthenticationResultType authResult = authResponse.authenticationResult();
             return SignInResponse.builder().accessToken(authResult.idToken()).build();
