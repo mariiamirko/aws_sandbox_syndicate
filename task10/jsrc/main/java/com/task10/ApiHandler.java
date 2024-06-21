@@ -54,6 +54,7 @@ public class ApiHandler implements RequestHandler<Map<String, Object>, APIGatewa
                         .withStatusCode(HttpStatus.SC_OK)
                         .withBody(objectMapper.writeValueAsString(getAllReservations()));
             } else {
+                System.out.println("API handler: received GET table by id request");
                 return new APIGatewayProxyResponseEvent()
                         .withStatusCode(HttpStatus.SC_OK)
                         .withBody(objectMapper.writeValueAsString(getTableById(pathParameters)));
@@ -126,6 +127,8 @@ public class ApiHandler implements RequestHandler<Map<String, Object>, APIGatewa
     }
 
     private Table getTableById(final Map<String, String> pathParameters) {
+        final int tableId = Integer.parseInt(pathParameters.get("tableId"));
+        System.out.println("inside getTableById. Id: " + tableId);
 //        final String tableId = pathParameters.get("tableId");
 //        final Map<String, AttributeValue> keyToGet = Map.of(ID, new AttributeValue().withN(tableId));
 //
@@ -134,7 +137,7 @@ public class ApiHandler implements RequestHandler<Map<String, Object>, APIGatewa
 //
 //        return Table.builder().id(Integer.parseInt(result.getItem().get(ID).getN())).minOrder(Integer.parseInt(result.getItem().get(MIN_ORDER).getN())).isVip(Boolean.parseBoolean(String.valueOf(result.getItem().get(IS_VIP).getBOOL()))).places(Integer.parseInt(result.getItem().get(PLACES).getN())).number(Integer.parseInt(result.getItem().get(NUMBER).getN()))
 //                .build();
-        return getAllTables().getTables().stream().filter(table -> table.getId() == Integer.parseInt(pathParameters.get("tableId"))).findFirst().orElseThrow(() -> new IllegalArgumentException("Table not found"));
+        return getAllTables().getTables().stream().filter(table -> table.getId() == tableId).findFirst().orElseThrow(() -> new IllegalArgumentException("Table not found"));
     }
 
     private PostReservationsResponse postReservations(final Map<String, Object> event) throws RuntimeException {
