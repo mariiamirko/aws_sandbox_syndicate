@@ -27,6 +27,7 @@ public class CognitoService {
 
     public String signUpUser(final Map<String, Object> input) {
         try {
+            System.out.println("signUpUser entered");
             final User userFromEvent = getUserFromEvent(input);
 
             final SignUpRequest signUpRequest = SignUpRequest.builder()
@@ -39,24 +40,27 @@ public class CognitoService {
             cognitoClient.adminConfirmSignUp(adminConfirmSignUpRequest);
             return "User Created!";
         } catch (Exception e) {
+            System.out.println("signUpUser exception");
             throw e;
         }
     }
 
     public SignInResponse signInUser(final Map<String, Object> input) {
         try {
+            System.out.println("Sign in user entered");
             final User user = getUserFromEvent(input);
             final InitiateAuthRequest authRequest = InitiateAuthRequest.builder()
                     .authFlow("USER_PASSWORD_AUTH")
                     .authParameters(Map.of("USERNAME", user.getEmail(), "PASSWORD", user.getPassword()))
                     .clientId(getClientId())
                     .build();
-
+            System.out.println("before initiateAuth");
             final InitiateAuthResponse authResponse = cognitoClient.initiateAuth(authRequest);
-
+            System.out.println("initiateAuth completed");
             final AuthenticationResultType authResult = authResponse.authenticationResult();
             return SignInResponse.builder().accessToken(authResult.idToken()).build();
         } catch (Exception e) {
+            System.out.println("signInUser exception");
             throw e;
         }
     }
@@ -74,6 +78,7 @@ public class CognitoService {
                 }
             }
         } catch (Exception e) {
+            System.out.println("getUserPoolId exception");
             throw e;
         }
         return null;
@@ -86,6 +91,7 @@ public class CognitoService {
     }
 
     private User getUserFromEvent(final Map<String, Object> input) {
+        System.out.println("getUserFromEvent entered");
         final Map<String, Object> inputBody = Jackson.fromJsonString((String) input.get("body"), Map.class);
         return User.builder().email((String) inputBody.get("email")).firstName((String) inputBody.get("firstName")).lastName((String) inputBody.get("firstName")).password((String) inputBody.get("password")).build();
     }
