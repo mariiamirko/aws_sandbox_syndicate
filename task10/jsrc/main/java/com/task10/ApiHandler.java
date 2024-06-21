@@ -17,9 +17,7 @@ import lombok.SneakyThrows;
 import org.apache.http.HttpStatus;
 import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityProviderClient;
 
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.task10.utilities.Constants.*;
@@ -128,14 +126,15 @@ public class ApiHandler implements RequestHandler<Map<String, Object>, APIGatewa
     }
 
     private Table getTableById(final Map<String, String> pathParameters) {
-        final String tableId = pathParameters.get("tableId");
-        final Map<String, AttributeValue> keyToGet = Map.of(ID, new AttributeValue().withN(tableId));
-
-        final GetItemRequest request = new GetItemRequest().withKey(keyToGet).withTableName(TABLE_TABLE_NAME);
-        final GetItemResult result = client.getItem(request);
-
-        return Table.builder().id(Integer.parseInt(result.getItem().get(ID).getN())).minOrder(Integer.parseInt(result.getItem().get(MIN_ORDER).getN())).isVip(Boolean.parseBoolean(String.valueOf(result.getItem().get(IS_VIP).getBOOL()))).places(Integer.parseInt(result.getItem().get(PLACES).getN())).number(Integer.parseInt(result.getItem().get(NUMBER).getN()))
-                .build();
+//        final String tableId = pathParameters.get("tableId");
+//        final Map<String, AttributeValue> keyToGet = Map.of(ID, new AttributeValue().withN(tableId));
+//
+//        final GetItemRequest request = new GetItemRequest().withKey(keyToGet).withTableName(TABLE_TABLE_NAME);
+//        final GetItemResult result = client.getItem(request);
+//
+//        return Table.builder().id(Integer.parseInt(result.getItem().get(ID).getN())).minOrder(Integer.parseInt(result.getItem().get(MIN_ORDER).getN())).isVip(Boolean.parseBoolean(String.valueOf(result.getItem().get(IS_VIP).getBOOL()))).places(Integer.parseInt(result.getItem().get(PLACES).getN())).number(Integer.parseInt(result.getItem().get(NUMBER).getN()))
+//                .build();
+        return getAllTables().getTables().stream().filter(table -> table.getId() == Integer.parseInt(pathParameters.get("tableId"))).findFirst().orElseThrow(() -> new IllegalArgumentException("Table not found"));
     }
 
     private PostReservationsResponse postReservations(final Map<String, Object> event) throws RuntimeException {
@@ -143,6 +142,8 @@ public class ApiHandler implements RequestHandler<Map<String, Object>, APIGatewa
         final Map<String, Object> inputBody = Jackson.fromJsonString((String) event.get("body"), Map.class);
         final AttributeValue tableNumber = new AttributeValue(String.valueOf((int) inputBody.get(TABLE_NUMBER)));
         final Map<String, AttributeValue> item = Map.of(ID, new AttributeValue(reservationId), TABLE_NUMBER, tableNumber, CLIENT_NAME, new AttributeValue((String) inputBody.get(CLIENT_NAME)), PHONE_NUMBER, new AttributeValue((String) inputBody.get(PHONE_NUMBER)), DATE, new AttributeValue(validateDateFormat((String) inputBody.get(DATE))), SLOT_TIME_START, new AttributeValue(validateTimeFormat((String) inputBody.get(SLOT_TIME_START))), SLOT_TIME_END, new AttributeValue(validateTimeFormat((String) inputBody.get(SLOT_TIME_END))));
+
+        tableExists((int)inputBody.get(TABLE_NUMBER));
 
         final Reservation reservation = Reservation.builder().tableNumber((Integer) inputBody.get(TABLE_NUMBER)).clientName((String) inputBody.get(CLIENT_NAME)).phoneNumber((String) inputBody.get(PHONE_NUMBER)).date((String) inputBody.get(DATE)).slotTimeStart((String) inputBody.get(SLOT_TIME_START)).slotTimeEnd((String) inputBody.get(SLOT_TIME_END))
                 .build();
@@ -158,6 +159,11 @@ public class ApiHandler implements RequestHandler<Map<String, Object>, APIGatewa
 
         return PostReservationsResponse.builder().reservationId(reservationId)
                 .build();
+    }
+
+    private void tableExists(int tableNumber) {
+        System.out.println("Checking if table exists");
+        getAllTables().getTables().stream().filter(table -> table.getNumber() == tableNumber).findFirst().orElseThrow(() -> new IllegalArgumentException("Table does not exist"));
     }
 }
 

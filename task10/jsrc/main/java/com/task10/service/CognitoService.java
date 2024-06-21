@@ -40,7 +40,7 @@ public class CognitoService {
             cognitoClient.adminConfirmSignUp(adminConfirmSignUpRequest);
             return "User Created!";
         } catch (Exception e) {
-            System.out.println("signUpUser exception");
+            System.out.println("signUpUser exception: " + e.getMessage());
             throw e;
         }
     }
@@ -49,18 +49,20 @@ public class CognitoService {
         try {
             System.out.println("Sign in user entered");
             final User user = getUserFromEvent(input);
-            final InitiateAuthRequest authRequest = InitiateAuthRequest.builder()
-                    .authFlow("USER_PASSWORD_AUTH")
+            final String userPoolId = getUserPoolId(COGNITO_USER_POOL_NAME);
+            final AdminInitiateAuthRequest authRequest = AdminInitiateAuthRequest.builder()
+                    .authFlow(AuthFlowType.ADMIN_NO_SRP_AUTH)
+                    .userPoolId(userPoolId)
                     .authParameters(Map.of("USERNAME", user.getEmail(), "PASSWORD", user.getPassword()))
                     .clientId(getClientId())
                     .build();
             System.out.println("before initiateAuth");
-            final InitiateAuthResponse authResponse = cognitoClient.initiateAuth(authRequest);
+            final AdminInitiateAuthResponse authResponse = cognitoClient.adminInitiateAuth(authRequest);
             System.out.println("initiateAuth completed");
             final AuthenticationResultType authResult = authResponse.authenticationResult();
             return SignInResponse.builder().accessToken(authResult.idToken()).build();
         } catch (Exception e) {
-            System.out.println("signInUser exception");
+            System.out.println("signInUser: " + e.getMessage());
             throw e;
         }
     }
